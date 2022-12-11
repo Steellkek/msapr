@@ -17,7 +17,6 @@ public class ModuleRepo
     }
     private List<Module> Shuffle(PCB pcb, List<Module> modules)
     {
-        
         Random rand = new Random();
         var x = 0;
         var g = 0;
