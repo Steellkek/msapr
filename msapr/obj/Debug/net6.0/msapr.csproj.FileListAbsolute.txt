@@ -1,0 +1,15 @@
+C:\Users\User\RiderProjects\msapr\msapr\bin\Debug\net6.0\msapr.exe
+C:\Users\User\RiderProjects\msapr\msapr\bin\Debug\net6.0\msapr.deps.json
+C:\Users\User\RiderProjects\msapr\msapr\bin\Debug\net6.0\msapr.runtimeconfig.json
+C:\Users\User\RiderProjects\msapr\msapr\bin\Debug\net6.0\msapr.dll
+C:\Users\User\RiderProjects\msapr\msapr\bin\Debug\net6.0\msapr.pdb
+C:\Users\User\RiderProjects\msapr\msapr\obj\Debug\net6.0\msapr.csproj.AssemblyReference.cache
+C:\Users\User\RiderProjects\msapr\msapr\obj\Debug\net6.0\msapr.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\RiderProjects\msapr\msapr\obj\Debug\net6.0\msapr.AssemblyInfoInputs.cache
+C:\Users\User\RiderProjects\msapr\msapr\obj\Debug\net6.0\msapr.AssemblyInfo.cs
+C:\Users\User\RiderProjects\msapr\msapr\obj\Debug\net6.0\msapr.csproj.CoreCompileInputs.cache
+C:\Users\User\RiderProjects\msapr\msapr\obj\Debug\net6.0\msapr.dll
+C:\Users\User\RiderProjects\msapr\msapr\obj\Debug\net6.0\refint\msapr.dll
+C:\Users\User\RiderProjects\msapr\msapr\obj\Debug\net6.0\msapr.pdb
+C:\Users\User\RiderProjects\msapr\msapr\obj\Debug\net6.0\msapr.genruntimeconfig.cache
+C:\Users\User\RiderProjects\msapr\msapr\obj\Debug\net6.0\ref\msapr.dll

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <graph>
+    <n>10</n>
+    <matrix>0 0 0 0 0 0 0 0 0 6 
+0 0 19 0 0 0 0 19 0 0 
+0 19 0 0 0 5 0 0 0 15 
+0 0 0 0 0 0 0 0 0 2 
+0 0 0 0 0 18 0 14 10 0 
+0 0 5 0 18 0 0 6 0 0 
+0 0 0 0 0 0 0 9 0 0 
+0 19 0 0 14 6 9 0 6 0 
+0 0 0 0 10 0 0 6 0 0 
+6 0 15 2 0 0 0 0 0 0 
+</matrix>
+<sizeElements>1 2
+3 4
+5 6
+7 8
+1 2
+3 5
+6 7
+2 9
+6 8
+2 4
+</sizeElements>
+  </graph>
+  <split>2 4 1 1 1 1 </split>
+  <sizeSplit>500 500 500 500 500 500 </sizeSplit>
+  <GenAlg>
+    <CountGenome>20</CountGenome>
+    <Iteration>200</Iteration>
+    <ChanseCrosover>0,95</ChanseCrosover>
+    <ChanseMutation>0,1</ChanseMutation>
+    <ChanseInversion>0,1</ChanseInversion>
+  </GenAlg>
+</root>
