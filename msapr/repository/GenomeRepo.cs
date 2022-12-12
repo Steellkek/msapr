@@ -1,4 +1,6 @@
-﻿namespace msapr.repository;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace msapr.repository;
 
 public class GenomeRepo
 {
@@ -11,6 +13,7 @@ public class GenomeRepo
         return genome;
     }
 
+    
     private void PrintNumber(List<Element> elements)
     {
         foreach (var VARIABLE in elements)
@@ -20,44 +23,50 @@ public class GenomeRepo
         Console.WriteLine();
     }
 
-    public void Crossingover(Genome genome1,Genome genome2)
+    public List<Module> CopyListModule(List<Module> modules)
+    {
+        var copyModules = new List<Module>();
+        foreach (var module in modules)
+        {
+            var newModule = new Module(module.Cnt, module.Square);
+            module.Elements.ForEach(e=>newModule.Elements.Add(e));
+            copyModules.Add(newModule);
+        }
+
+        return copyModules;
+    }
+
+    public List<Module> GetChild(Genome genome1,Genome genome2,int x)
     {
         
-        var x = 2;
-        var y = 0;
-        var list1 = GetElementsFromModule(genome1);
-        var list2 = GetElementsFromModule(genome2);
+        var list1 = GetElementsFromModule(genome1.Modules);
+        var list2 = GetElementsFromModule(genome2.Modules);
+        var child = CopyListModule(genome1.Modules);
+        //genome1.Modules.ForEach(e=>child.Add(e));
         PrintNumber(list1);
         PrintNumber(list2);
-        var child1 = genome1.Modules.GetRange(0,genome1.Modules.Count);
-        var child2 = genome2.Modules.GetRange(0,genome2.Modules.Count);
-        var list3 = new List<Element>();
 
-        while (y != 1)
+        for (int l = 0; l < genome1.Modules.Sum(x=>x.Elements.Count); l++)
         {
-            list3.Clear();
             var j = 0;
-            foreach (var module in child1)
+            foreach (var module in child)
             {
                 module.Elements.Clear();
             }
 
-            foreach (var module in child1)
+            foreach (var module in child)
             {
-                module.Elements.Clear();
                 for (int i = j; i < list2.Count && module.Cnt > module.Elements.Count; i++)
                 {
                     if (j <= x)
                     {
                         module.Elements.Add(list1[j]);
-                        list3.Add(list1[j]);
                         j += 1;
                     }
                     else if ((list2[i].Squre + module.Elements.Sum(x => x.Squre) < module.Square) &&
-                             (!ExistInModule(child1, list2[i])))
+                             (!ExistInModule(child, list2[i])))
                     {
                         module.Elements.Add(list2[i]);
-                        list3.Add(list2[i]);
                         list2.Remove(list2[i]);
                         i--;
                     }
@@ -69,112 +78,79 @@ public class GenomeRepo
                 }
             }
 
-            foreach (var module in child1)
+            foreach (var module in child)
             {
                 if (module.Cnt > module.Elements.Count)
                 {
                     for (int i = 0; i < list2.Count && module.Cnt > module.Elements.Count; i++)
                     {
                         if ((list2[i].Squre + module.Elements.Sum(x => x.Squre) < module.Square) &&
-                            (!ExistInModule(child1, list2[i])))
+                            (!ExistInModule(child, list2[i])))
                         {
                             module.Elements.Add(list2[i]);
-                            list3.Add(list2[j]);
                             list2.Remove(list2[i]);
                             i--;
                         }
                     }
                 }
+            }
 
-                if (module.Cnt > module.Elements.Count)
-                {
-                    y = 0;
-                    list1 = GetElementsFromModule(genome1);
-                    list2 = leftShufle(GetElementsFromModule(genome2));
-                    break;
-                }
-                else
-                {
-                    y = 1;
-                }
+            if (child.Sum(x=>x.Elements.Count)!=genome1.Modules.Sum(x=>x.Cnt))
+            {
+                list1 = GetElementsFromModule(genome1.Modules);
+                list2 = leftShufle(GetElementsFromModule(genome2.Modules));
+            }
+            else
+            {
+                break;
             }
         }   
-        PrintNumber(list3);
+        PrintNumber(GetElementsFromModule(child));
         
-         list1 = GetElementsFromModule(genome1);
-         list2 = GetElementsFromModule(genome2);
-        y = 0;
-        while (y != 1)
+        if (child.Sum(x=>x.Elements.Count)!=genome1.Modules.Sum(x=>x.Cnt))
         {
-            list3.Clear();
-            var j = 0;
-            foreach (var module in child2)
-            {
-                module.Elements.Clear();
-            }
-
-            foreach (var module in child2)
-            {
-                module.Elements.Clear();
-                for (int i = j; i < list1.Count && module.Cnt > module.Elements.Count; i++)
-                {
-                    if (j <= x)
-                    {
-                        module.Elements.Add(list2[j]);
-                        list3.Add(list2[j]);
-                        j += 1;
-                    }
-                    else if ((list1[i].Squre + module.Elements.Sum(x => x.Squre) < module.Square) &&
-                             (!ExistInModule(child2, list1[i])))
-                    {
-                        module.Elements.Add(list1[i]);
-                        list3.Add(list1[i]);
-                        list1.Remove(list1[i]);
-                        i--;
-                    }
-
-                    if (module.Cnt == module.Elements.Count)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            foreach (var module in child2)
-            {
-                if (module.Cnt > module.Elements.Count)
-                {
-                    for (int i = 0; i < list1.Count && module.Cnt > module.Elements.Count; i++)
-                    {
-                        if ((list1[i].Squre + module.Elements.Sum(x => x.Squre) < module.Square) &&
-                            (!ExistInModule(child2, list1[i])))
-                        {
-                            module.Elements.Add(list1[i]);
-                            list3.Add(list1[i]);
-                            list1.Remove(list1[i]);
-                            i--;
-                        }
-                    }
-                }
-
-                if (module.Cnt > module.Elements.Count)
-                {
-                    y = 0;
-                    list2 = GetElementsFromModule(genome1);
-                    list1 = leftShufle(GetElementsFromModule(genome2));
-                    break;
-                }
-                else
-                {
-                    y = 1;
-                }
-            }
-        }   
-        PrintNumber(list3);
-
-        var g = 5;
+            return genome1.Modules;
+        }
+        else
+        {
+            return child;
+        }
+        
     }
 
+    public void Mutation(Genome genome)
+    {
+        var list = GetElementsFromModule(genome.Modules);
+        var mutatationModule = CopyListModule(genome.Modules);
+        foreach (var module in mutatationModule)
+        {
+            module.Elements.Clear();
+        }
+        Random ran = new();
+        var position1 = ran.Next(0, list.Count);
+        var position2 = ran.Next(0, list.Count);
+        while (position1==position2)
+        {
+            position2 = ran.Next(0, list.Count);
+        }
+        
+
+    }
+
+    public bool CheckEquality(Genome genome1, Genome genome2)
+    {
+        var list1 = GetElementsFromModule(genome1.Modules);
+        var list2 = GetElementsFromModule(genome2.Modules);
+        for (int i = 0; i < list1.Count; i++)
+        {
+            if (list1[i].Number!=list2[i].Number)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
     public List<Element> leftShufle(List<Element> elements)
     {
         /*Random rand = new();
@@ -200,10 +176,10 @@ public class GenomeRepo
 
         return false;
     }
-    private List<Element> GetElementsFromModule(Genome genome)
+    private List<Element> GetElementsFromModule(List<Module> modules)
     {
         List<Element> list = new();
-        foreach (var module in genome.Modules)
+        foreach (var module in modules)
         {
             foreach (var element in module.Elements)
             {
@@ -213,7 +189,7 @@ public class GenomeRepo
 
         return list;
     }
-    private decimal DetermineFitnes(List<Module> modules)
+    public decimal DetermineFitnes(List<Module> modules)
     {
         decimal F = 0;
         decimal K = 0;

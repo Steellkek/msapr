@@ -10,15 +10,15 @@ public class populationRepo
         {
             population.Genomes.Add(genomeRepo.CreateFirstGenome(pcb));
         }
-        DetermineNewFitnes(population);
-        population.SumFitness = population.Genomes.Sum(x => x.NewFitness);
+        //DetermineNewFitnes(population);
+        population.SumFitness = population.Genomes.Sum(x => x.Fitness);
         return population;
     }
 
-    private void DetermineNewFitnes(Population population)
+    /*public void DetermineNewFitnes(Population population)
     {
         decimal dMin = 1;
-        decimal dMax = 10;
+        decimal dMax = 100;
         var min = population.Genomes.Min(x => x.Fitness);
         var max = population.Genomes.Max(x => x.Fitness);
         var a = (dMin - dMax) / (min - max);
@@ -27,16 +27,19 @@ public class populationRepo
         {
             genome.NewFitness = a * genome.Fitness + b;
         }
-    }
+        population.SumNewFitness = population.Genomes.Sum(x => x.NewFitness);
+        population.SumFitness = population.Genomes.Sum(x => x.Fitness);
+    }*/
 
     public List<Genome> GetNewParents(Population population)
     {
         Random ran = new Random();
         var Chances = new List<decimal>();
-        Chances.Add( population.Genomes[0].NewFitness / population.SumFitness);
+        var x = population.Genomes.Count * (population.Genomes.Count + 1) / 2;
+        Chances.Add( (decimal)1 / x);
         for (int i = 1; i <population.Genomes.Count; i++)
         {
-            Chances.Add( Chances[i-1]+ population.Genomes[i].NewFitness/population.SumFitness);
+            Chances.Add( Chances[i-1]+ ((decimal)(i+1)/x));
         }
 
         var Parents = new List<Genome>();
@@ -59,5 +62,24 @@ public class populationRepo
             }
         }
         return Parents;
+    }
+
+    public Population Crossingover(Population population,double chance)
+    {
+        var rand = new Random();
+        var y = new GenomeRepo();
+        for (int i = 0; i < population.Genomes.Count; i=i+2)
+        {
+            var newChance = rand.NextDouble();
+            var point = rand.Next(0,population.Genomes[i].Modules.Sum(x=>x.Cnt));
+            if (chance>newChance&&!y.CheckEquality(population.Genomes[i],population.Genomes[i+1]))
+            {
+                var child1 = y.GetChild(population.Genomes[i], population.Genomes[i + 1], point);
+                var child2 = y.GetChild(population.Genomes[i+1], population.Genomes[i], point);
+                population.Genomes[i].Modules = child1;
+                population.Genomes[i + 1].Modules = child2;
+            }
+        }
+        return population;
     }
 }
