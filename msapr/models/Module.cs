@@ -8,7 +8,7 @@ public class Module
 
     public Module(int count, int square)
     {
-        Square = square;
+        Square = square == 0 ? Int32.MaxValue : square;
         Cnt = count;
     }
 }

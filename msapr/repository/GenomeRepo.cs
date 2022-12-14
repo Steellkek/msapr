@@ -118,22 +118,65 @@ public class GenomeRepo
         
     }
 
-    public void Mutation(Genome genome)
+    public List<Module> Mutation(Genome genome)
     {
-        var list = GetElementsFromModule(genome.Modules);
-        var mutatationModule = CopyListModule(genome.Modules);
-        foreach (var module in mutatationModule)
-        {
-            module.Elements.Clear();
-        }
+
         Random ran = new();
-        var position1 = ran.Next(0, list.Count);
-        var position2 = ran.Next(0, list.Count);
-        while (position1==position2)
+        int position1=0;
+        int position2=0;
+
+        var list = GetElementsFromModule(genome.Modules);
+        var listTuple = new List<Tuple<int, int>>();
+        var mutatationModule = CopyListModule(genome.Modules);
+
+        var cnt = genome.Modules.Sum(x => x.Cnt) * (genome.Modules.Sum(x => x.Cnt) - 1) / 2;
+        for (int j = 0; j < cnt; j++)
         {
-            position2 = ran.Next(0, list.Count);
+            foreach (var module in mutatationModule)
+            {
+                module.Elements.Clear();
+            }
+            do
+            {
+                position1 = ran.Next(0, list.Count);
+                position2 = ran.Next(0, list.Count);
+                while (position1 == position2)
+                {
+                    position2 = ran.Next(0, list.Count);
+                }
+            } while (listTuple.Contains(new Tuple<int, int>(position1, position2)));
+
+            listTuple.Add(new Tuple<int, int>(position1,position2));
+            listTuple.Add(new Tuple<int, int>(position2,position1));
+            (list[position1], list[position2])= (list[position2], list[position1]);
+
+            foreach (var module in mutatationModule)
+            {
+                for (int i = 0; i < list.Count && module.Cnt > module.Elements.Count; i++)
+                {
+                    module.Elements.Add(list[i]);
+                    list.Remove(list[i]);
+                    i--;
+                }
+            }
+            if (mutatationModule.Sum(x=>x.Elements.Count)!=genome.Modules.Sum(x=>x.Cnt))
+            {
+                list = GetElementsFromModule(genome.Modules);
+            }
+            else
+            {
+                break;
+            }
         }
-        
+
+        if (mutatationModule.Sum(x=>x.Elements.Count)!=genome.Modules.Sum(x=>x.Cnt))
+        {
+            return genome.Modules;
+        }
+        else
+        {
+            return mutatationModule;
+        }
 
     }
 
